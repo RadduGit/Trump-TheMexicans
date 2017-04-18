@@ -2,7 +2,7 @@ Lucruri ramase de facut :
 
 - clasa Entity din care derivam Rock, Player si Power-up
 - clasa EnityManager (va lua la rand pietrele si puterile si le va deplasa incontinuu)(Singleton)
-- clasa InputManager (va vedea ce e tastat si modifica pozitia player-ului, nu il si afiseaza)(Singleton)
+- clasa InputManager (va vedea ce e tastat si modifica pozitia player-ului, nu il si afiseaza)(Singleton) BOGDAN
 - clasa Power-up derivata din Entity
 - clasa Score
 - metoda de a genera pietre care se vor misca din ce in ce mai repede
