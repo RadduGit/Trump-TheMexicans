@@ -12,7 +12,6 @@ void Rock :: Descend()
 {
 	rock.move(0.0f, speed);
 	ry += speed;
-//	speed += 0.001;
 }
 
 void Rock :: Appear(sf::RenderWindow& window)
