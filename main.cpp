@@ -3,11 +3,54 @@
 #include <iostream>
 #include <windows.h>
 #include <thread>
+#include <vector>
+#include <stdlib.h> 
+#include <time.h> 
 
 #include "player.h"
 #include "rock.h"
 
 using namespace std;
+
+bool verifSpam(const std::vector<Rock*> rock, int poz)
+{
+	int spam = 0;
+	bool A[1500];
+	for (int i = 0; i < 1367; ++i)
+	{
+		A[i] = 0;
+	}
+	for (int i = 0; i < rock.size(); ++i)
+	{
+		if (rock[i]->ry <= 600)
+		{
+			for (int j = rock[i]->initx - 5; j < rock[i]->initx + 145; ++j)
+			{
+				A[j] = 1;
+			}
+		}
+	}
+	for (int j = poz - 5; j < poz + 145; ++j)
+	{
+		A[j] = 1;
+	}
+	for (int i = 0; i < 1367; ++i)
+	{
+		if (A[i] == 0)
+		{
+			++spam;
+		}
+		else
+		{
+			spam = 0;
+		}
+		if (spam >= 142)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
 
 sf::RenderWindow  win1(sf::VideoMode(1366, 768), "Trump & The Mexicans", sf::Style::Default);
 Player* player1 = new Player(140.0f, 200.0f, 500.0f, 500.0f, 5.0f, "mex.png");
@@ -15,15 +58,17 @@ Rock* rock1 = new Rock(140.0f, 100.0f, 100.0f, -140.0f, 5.0f, "rock1.png");
 Rock* rock2 = new Rock(140.0f, 100.0f, 400.0f, -140.0f, 4.0f, "rock1.png");
 Rock* rock3 = new Rock(140.0f, 100.0f, 700.0f, -140.0f, 3.0f, "rock1.png");
 Rock* rock4 = new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 2.0f, "rock1.png");
+vector <Rock*> rock;
 bool fin = 0;
 int numcol;
+int poz;
 void col(Player* p, Rock* r)
-{ 
-	if (r->ry + r->dimy >= p->py && ((r->rx >= p->px && r->rx <= p->px + p->dimx) || 
-		(r->rx + r->dimx >= p->px && r->rx + r->dimx <= p->px + p->dimx))  )
-	{   
+{
+	if (r->ry + r->dimy >= p->py && ((r->rx >= p->px && r->rx <= p->px + p->dimx) ||
+		(r->rx + r->dimx >= p->px && r->rx + r->dimx <= p->px + p->dimx)))
+	{
 		numcol++;
-		cout << "Collision " << numcol << "\n" ;
+		cout << "Collision " << numcol << "\n";
 	}
 }
 
@@ -33,6 +78,7 @@ void PlayerThread()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 		{
+
 			player1->MoveLeft();
 		}
 
@@ -59,36 +105,45 @@ void RockThread(Rock* rock1)
 }
 
 int main()
-{   
+{
+	srand(time(NULL));
+	poz = rand() % 1200;
+	while (rock.size() < 4)
+	{
+		poz = rand() % 1200;
+		if (verifSpam(rock, poz))
+		{
+			rock.push_back(new Rock(140.0f, 100.0f, poz, -140.0f, 3.0f, "rock1.png"));
+		}
+		Sleep(500);
+	}
 	sf::RectangleShape wall(sf::Vector2f(1366.0f, 768.0f));
 	sf::Texture back;
 	back.loadFromFile("wall.jpg");
 	wall.setTexture(&back);
 
 std::thread t1(PlayerThread);
-	std::thread t2(RockThread,rock1);
-	Sleep(300);
-	std::thread t3(RockThread,rock2);
+	std::thread t2(RockThread,rock[0]);
 	Sleep(500);
-	std::thread t4(RockThread, rock3);
+	std::thread t3(RockThread,rock[1]);
 	Sleep(500);
-	std::thread t5(RockThread, rock4);
+	std::thread t4(RockThread, rock[2]);
+	Sleep(500);
+	std::thread t5(RockThread, rock[3]);
 
 	t1; t2; t3; t4; t5;
 
 	while (!fin)
 	{
+
 		win1.clear();
 		win1.draw(wall);
 		player1->Appear(win1);
-		rock1->Appear(win1);
-		col(player1, rock1);
-		rock2->Appear(win1);
-		col(player1, rock2);
-		rock3->Appear(win1);
-		col(player1, rock3);
-		rock4->Appear(win1);
-		col(player1, rock4);
+		for (int i = 0; i < rock.size(); ++i)
+		{
+			rock[i]->Appear(win1);
+			col(player1, rock[i]);
+		}
 		win1.display();
 		sf::Event ev1;
         
