@@ -1,12 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
-class Player
+#include "entity.h"
+class Player : public Entity
 {
-public:
-	float px, py, dimx, dimy, speed;
-	sf::RectangleShape player;
-	sf::Texture ptext;
+
 public:
     Player(float, float, float, float, float, char[]);
 	void MoveRight();
