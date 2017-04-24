@@ -12,7 +12,6 @@ void Rock :: Descend()
 {
 	rock.move(0.0f, speed);
 	ry += speed;
-	//Bogdan e prost
 }
 
 void Rock :: Appear(sf::RenderWindow& window)
