@@ -6,18 +6,19 @@
 
 #include "player.h"
 #include "rock.h"
-
+#include "entity.h"
 using namespace std;
 
 sf::RenderWindow  win1(sf::VideoMode(1366, 768), "Trump & The Mexicans", sf::Style::Default);
-Player* player1 = new Player(140.0f, 200.0f, 500.0f, 500.0f, 5.0f, "mex.png");
-Rock* rock1 = new Rock(140.0f, 100.0f, 100.0f, -140.0f, 5.0f, "rock1.png");
-Rock* rock2 = new Rock(140.0f, 100.0f, 400.0f, -140.0f, 4.0f, "rock1.png");
-Rock* rock3 = new Rock(140.0f, 100.0f, 700.0f, -140.0f, 3.0f, "rock1.png");
-Rock* rock4 = new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 2.0f, "rock1.png");
+
+Entity* player1 = new Player(140.0f, 200.0f, 500.0f, 500.0f, 5.0f, "mex.png");
+Entity* rock1 = new Rock(140.0f, 100.0f, 100.0f, -140.0f, 30.0f, "rock1.png");
+Entity* rock2 = new Rock(140.0f, 100.0f, 400.0f, -140.0f, 24.0f, "rock1.png");
+Entity* rock3 = new Rock(140.0f, 100.0f, 700.0f, -140.0f, 18.0f, "rock1.png");
+Entity* rock4 = new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 12.0f, "rock1.png");
 bool fin = 0;
 int numcol;
-void col(Player* p, Rock* r)
+/*void col(Player* p, Rock* r)
 { 
 	if (r->ry + r->dimy >= p->py && ((r->rx >= p->px && r->rx <= p->px + p->dimx) || 
 		(r->rx + r->dimx >= p->px && r->rx + r->dimx <= p->px + p->dimx))  )
@@ -25,9 +26,9 @@ void col(Player* p, Rock* r)
 		numcol++;
 		cout << "Collision " << numcol << "\n" ;
 	}
-}
+}*/
 
-void PlayerThread()
+void PlayerThread(Player* player1)
 {
 	while (!fin)
 	{
@@ -54,25 +55,27 @@ void RockThread(Rock* rock1)
 		{
 			rock1->Reestablish();
 		}
-		Sleep(5);
+		Sleep(30);
 	}
 }
 
 int main()
 {   
+	
 	sf::RectangleShape wall(sf::Vector2f(1366.0f, 768.0f));
 	sf::Texture back;
 	back.loadFromFile("wall.jpg");
 	wall.setTexture(&back);
 
-std::thread t1(PlayerThread);
-	std::thread t2(RockThread,rock1);
+    std::thread t1(PlayerThread, static_cast<Player*>(player1));
 	Sleep(300);
-	std::thread t3(RockThread,rock2);
+	std::thread t2(RockThread,static_cast<Rock*>(rock1));
+	Sleep(300);
+	std::thread t3(RockThread, static_cast<Rock*>(rock2));
 	Sleep(500);
-	std::thread t4(RockThread, rock3);
+	std::thread t4(RockThread, static_cast<Rock*>(rock3));
 	Sleep(500);
-	std::thread t5(RockThread, rock4);
+	std::thread t5(RockThread, static_cast<Rock*>(rock4));
 
 	t1; t2; t3; t4; t5;
 
@@ -82,13 +85,13 @@ std::thread t1(PlayerThread);
 		win1.draw(wall);
 		player1->Appear(win1);
 		rock1->Appear(win1);
-		col(player1, rock1);
+		//col(player1, rock1);
 		rock2->Appear(win1);
-		col(player1, rock2);
+		//col(player1, rock2);
 		rock3->Appear(win1);
-		col(player1, rock3);
+		//col(player1, rock3);
 		rock4->Appear(win1);
-		col(player1, rock4);
+		//col(player1, rock4);
 		win1.display();
 		sf::Event ev1;
         
