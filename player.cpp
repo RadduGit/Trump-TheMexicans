@@ -21,6 +21,24 @@ void Player :: MoveLeft()
 	}
 }
 
+void Player :: MoveUp()
+{
+	if (py - speed >= 0 && py - speed + dimy <= 768)
+	{
+		shape.move(0.0f, -speed);
+		py -= speed;
+	}
+}
+
+void Player :: MoveDown()
+{
+	if (py + speed >= 0 && py + speed + dimy <= 768)
+	{
+		shape.move(0.0f, speed);
+		py += speed;
+	}
+}
+
 void Player :: Appear(sf::RenderWindow& window)
 {
 	window.draw(shape);

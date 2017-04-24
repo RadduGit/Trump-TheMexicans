@@ -3,30 +3,31 @@
 #include <iostream>
 #include <windows.h>
 #include <thread>
+#include <vector>
 
 #include "player.h"
 #include "rock.h"
 #include "entity.h"
+#define ecranx 1366	
+#define ecrany 768
 using namespace std;
 
-sf::RenderWindow  win1(sf::VideoMode(1366, 768), "Trump & The Mexicans", sf::Style::Default);
+sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
 
-Entity* player1 = new Player(140.0f, 200.0f, 500.0f, 500.0f, 5.0f, "mex.png");
-Entity* rock1 = new Rock(140.0f, 100.0f, 100.0f, -140.0f, 30.0f, "rock1.png");
-Entity* rock2 = new Rock(140.0f, 100.0f, 400.0f, -140.0f, 24.0f, "rock1.png");
-Entity* rock3 = new Rock(140.0f, 100.0f, 700.0f, -140.0f, 18.0f, "rock1.png");
-Entity* rock4 = new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 12.0f, "rock1.png");
+vector <Entity*> object;
+
 bool fin = 0;
 int numcol;
-/*void col(Player* p, Rock* r)
+void col(Player* p, Rock* r)
 { 
-	if (r->ry + r->dimy >= p->py && ((r->rx >= p->px && r->rx <= p->px + p->dimx) || 
-		(r->rx + r->dimx >= p->px && r->rx + r->dimx <= p->px + p->dimx))  )
+	if (r->py + r->dimy >= p->py && ((r->px >= p->px && r->px <= p->px + p->dimx) || 
+		(r->px + r->dimx >= p->px && r->px + r->dimx <= p->px + p->dimx))  )
 	{   
 		numcol++;
+		fin = 1;
 		cout << "Collision " << numcol << "\n" ;
 	}
-}*/
+}
 
 void PlayerThread(Player* player1)
 {
@@ -42,6 +43,16 @@ void PlayerThread(Player* player1)
 			player1->MoveRight();
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+		{
+			player1->MoveUp();
+		
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+		{
+			player1->MoveDown();
+		}
 		Sleep(5);
 	}
 }
@@ -55,46 +66,50 @@ void RockThread(Rock* rock1)
 		{
 			rock1->Reestablish();
 		}
-		Sleep(30);
+		Sleep(10);
 	}
 }
 
 int main()
 {   
+	object.push_back(new Player(140.0f, 200.0f, 1166.0f, 500.0f, 5.0f, "mex.png"));
+	object.push_back(new Rock(140.0f, 100.0f, 100.0f, -140.0f, 6.0f, "rock1.png"));
+	object.push_back(new Rock(140.0f, 100.0f, 400.0f, -140.0f, 5.0f, "rock1.png"));
+	object.push_back(new Rock(140.0f, 100.0f, 700.0f, -140.0f, 4.0f, "rock1.png"));
+	object.push_back(new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 3.0f, "rock1.png"));
 	
-	sf::RectangleShape wall(sf::Vector2f(1366.0f, 768.0f));
+	sf::RectangleShape wall(sf::Vector2f((float) ecranx, (float) ecrany));
 	sf::Texture back;
 	back.loadFromFile("wall.jpg");
 	wall.setTexture(&back);
 
-    std::thread t1(PlayerThread, static_cast<Player*>(player1));
+    std::thread t1(PlayerThread, static_cast<Player*>(object[0]));
 	Sleep(300);
-	std::thread t2(RockThread,static_cast<Rock*>(rock1));
+	std::thread t2(RockThread,static_cast<Rock*>(object[1]));
 	Sleep(300);
-	std::thread t3(RockThread, static_cast<Rock*>(rock2));
+	std::thread t3(RockThread, static_cast<Rock*>(object[2]));
 	Sleep(500);
-	std::thread t4(RockThread, static_cast<Rock*>(rock3));
+	std::thread t4(RockThread, static_cast<Rock*>(object[3]));
 	Sleep(500);
-	std::thread t5(RockThread, static_cast<Rock*>(rock4));
+	std::thread t5(RockThread, static_cast<Rock*>(object[4]));
 
 	t1; t2; t3; t4; t5;
-
+	
 	while (!fin)
 	{
 		win1.clear();
 		win1.draw(wall);
-		player1->Appear(win1);
-		rock1->Appear(win1);
-		//col(player1, rock1);
-		rock2->Appear(win1);
-		//col(player1, rock2);
-		rock3->Appear(win1);
-		//col(player1, rock3);
-		rock4->Appear(win1);
-		//col(player1, rock4);
+		for (int i = 0; i < object.size(); ++i)
+		{
+			object[i]->Appear(win1);
+			if (i != 0)
+			{
+				col(static_cast <Player*> (object[0]), static_cast <Rock*> (object[i]));
+			}
+		}
 		win1.display();
+		
 		sf::Event ev1;
-        
 		while (win1.pollEvent(ev1))
 		{
 			switch (ev1.type)
@@ -117,3 +132,8 @@ int main()
 
 
 
+///De terminat coliziunea + spamarea random
+///De vector cu stergeri si spamari noi
+///De facut type la clasele tale
+///Player este tip 1, pietrele
+///sunt tip 2 si power-up este tip 3

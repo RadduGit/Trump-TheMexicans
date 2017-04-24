@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "entity.h"
-
+class Player;
 class Rock : public Entity
 {
 private:
@@ -11,4 +11,5 @@ public:
 	void Descend();
 	bool InBounds();
     void Reestablish();	
+	friend void col(Player* p, Rock* r);
 };

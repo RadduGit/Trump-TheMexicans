@@ -6,6 +6,7 @@ Entity::Entity(float dim1, float dim2, float p1, float p2, float coef, char tpat
 	text.loadFromFile(tpath);
 	shape.setTexture(&text);
 	shape.setPosition(px, py);
+
 }
 
 void Entity::Appear(sf::RenderWindow& window)
