@@ -1,19 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "entity.h"
 
-
-class Rock
+class Rock : public Entity
 {
+private:
+	float initx, inity;
 public:
-	float initx, inity, rx, ry, dimx, dimy, speed;
-	sf::RectangleShape rock;
-	sf::Texture rtext;
-public:
-	
 	Rock(float, float, float, float, float, char[]);
 	void Descend();
-    void Appear(sf::RenderWindow&);
 	bool InBounds();
-    void Reestablish();
-	
+    void Reestablish();	
 };
