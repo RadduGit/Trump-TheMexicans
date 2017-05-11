@@ -200,12 +200,11 @@ void EntityManager::PlayerThread(Player* player1)
 
 void EntityManager::start()
 {
-	sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
+	//sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
 	srand(unsigned int(time(NULL)));
 	for (int i = 0; i < 100; i++)
 		rand();
 	object.push_back(new Player(140.0f, 200.0f, 1166.0f, 500.0f, 5.0f, "mex.png"));
-	entityManager.spam(object);
 
 	sf::RectangleShape wall(sf::Vector2f((float)ecranx, (float)ecrany));
 	sf::Texture back;

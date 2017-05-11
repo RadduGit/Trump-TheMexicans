@@ -13,7 +13,7 @@ using namespace std;
 extern vector <Entity*> object;
 extern bool fin;
 extern int numcol;
-
+extern sf::RenderWindow  win1;
 
 class EntityManager {
 	
