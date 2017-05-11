@@ -1,16 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
-class Player
+#include "entity.h"
+class Rock;
+class Player : public Entity
 {
-public:
-	float px, py, dimx, dimy, speed;
-	sf::RectangleShape player;
-	sf::Texture ptext;
+
 public:
     Player(float, float, float, float, float, char[]);
 	void MoveRight();
 	void MoveLeft();
+	void MoveUp();
+	void MoveDown();
     void Appear(sf::RenderWindow&);
-	
+	friend void col(Player* p, Rock* r);
+	friend class EntityManager;
 };

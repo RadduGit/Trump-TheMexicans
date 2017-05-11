@@ -4,81 +4,83 @@
 #include <windows.h>
 #include <thread>
 #include <vector>
-#include <stdlib.h> 
-#include <time.h> 
 
+#include"EntityManager.h"
 #include "player.h"
 #include "rock.h"
-
+#include "entity.h"
+#define ecranx 1366	
+#define ecrany 768
 using namespace std;
 
-bool verifSpam(const std::vector<Rock*> rock, int poz)
-{
-	int spam = 0;
-	bool A[1500];
-	for (int i = 0; i < 1367; ++i)
-	{
-		A[i] = 0;
-	}
-	for (int i = 0; i < rock.size(); ++i)
-	{
-		if (rock[i]->ry <= 600)
-		{
-			for (int j = rock[i]->initx - 5; j < rock[i]->initx + 145; ++j)
-			{
-				A[j] = 1;
-			}
-		}
-	}
-	for (int j = poz - 5; j < poz + 145; ++j)
-	{
-		A[j] = 1;
-	}
-	for (int i = 0; i < 1367; ++i)
-	{
-		if (A[i] == 0)
-		{
-			++spam;
-		}
-		else
-		{
-			spam = 0;
-		}
-		if (spam >= 142)
-		{
-			return 1;
-		}
-	}
-	return 0;
-}
+unsigned int contorx = 0;
 
-sf::RenderWindow  win1(sf::VideoMode(1366, 768), "Trump & The Mexicans", sf::Style::Default);
-Player* player1 = new Player(140.0f, 200.0f, 500.0f, 500.0f, 5.0f, "mex.png");
-Rock* rock1 = new Rock(140.0f, 100.0f, 100.0f, -140.0f, 5.0f, "rock1.png");
-Rock* rock2 = new Rock(140.0f, 100.0f, 400.0f, -140.0f, 4.0f, "rock1.png");
-Rock* rock3 = new Rock(140.0f, 100.0f, 700.0f, -140.0f, 3.0f, "rock1.png");
-Rock* rock4 = new Rock(140.0f, 100.0f, 1000.0f, -140.0f, 2.0f, "rock1.png");
-vector <Rock*> rock;
+//sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
+
+vector <Entity*> object;
+
 bool fin = 0;
 int numcol;
-int poz;
-void col(Player* p, Rock* r)
-{
-	if (r->ry + r->dimy >= p->py && ((r->rx >= p->px && r->rx <= p->px + p->dimx) ||
-		(r->rx + r->dimx >= p->px && r->rx + r->dimx <= p->px + p->dimx)))
+/*void col(Player* p, Rock* r)
+{   
+
+
+	int fx1 = p->px, fx2 = p->px + p->dimx, fy1 = p->py, fy2 = p->py + p->dimy;
+	int sx1 = r->px, sx2 = r->px + r->dimx, sy1 = r->py, sy2 = r->py + r->dimy;
+
+	int isx = 0, isy = 0, intx1 = 0, intx2 = 0, inty1 = 0, inty2 = 0;
+
+	if (fx1 < sx1)
 	{
+		if (fx2 >= sx1)
+		{
+			isx = 1;
+			intx1 = sx1;
+			intx2 = min(sx2, fx2);
+		}
+	}
+	else
+		if (fx1 <= sx2)
+		{
+			isx = 1;
+			intx1 = fx1;
+			intx2 = min(sx2, fx2);
+		}
+		
+	if (fy1 < sy1)
+	{
+		if (fy2 >= sy1)
+		{
+			isy = 1;
+			inty1 = sy1;
+			inty2 = min(sy2, fy2);
+		}
+	}
+	else
+		if (fy1 <= sy2)
+		{
+			isy = 1;
+			inty1 = fy1;
+			inty2 = min(sy2, fy2);
+		}
+
+	if (isx && isy && (intx2 - intx1)*(inty2 - inty1) > 2000)
+    {   
 		numcol++;
-		cout << "Collision " << numcol << "\n";
+		fin = 1;
+		cout << fx1 << " " << fx2 << " " << sx1 << " " << sx2 << " " << fy1 << " " << fy2 << sy1 << " " << sy2 << "\n";
+		cout << "Collision " << (intx2 - intx1)*(inty2 - inty1) << "\n";
+		//system("pause");
+		fin = 1;
 	}
 }
 
-void PlayerThread()
+void PlayerThread(Player* player1)
 {
 	while (!fin)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 		{
-
 			player1->MoveLeft();
 		}
 
@@ -87,66 +89,69 @@ void PlayerThread()
 			player1->MoveRight();
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+		{
+			player1->MoveUp();
+		
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+		{
+			player1->MoveDown();
+		}
 		Sleep(5);
 	}
 }
 
-void RockThread(Rock* rock1)
+
+
+
+
+void createRockThreat(vector <Entity*> object)
 {
 	while (!fin)
 	{
-		rock1->Descend();
-		if (!rock1->InBounds())
-		{
-			rock1->Reestablish();
-		}
-		Sleep(5);
+		entityManager.spam(object);
+		Sleep(25);
 	}
 }
+*/
 
+EntityManager EntityManager::entityManager;
+EntityManager& entityManager = EntityManager::getHandle();
 int main()
-{
-	srand(time(NULL));
-	poz = rand() % 1200;
-	while (rock.size() < 4)
-	{
-		poz = rand() % 1200;
-		if (verifSpam(rock, poz))
-		{
-			rock.push_back(new Rock(140.0f, 100.0f, poz, -140.0f, 3.0f, "rock1.png"));
-		}
-		Sleep(500);
-	}
-	sf::RectangleShape wall(sf::Vector2f(1366.0f, 768.0f));
+{   
+	/*srand(unsigned int(time(NULL)));
+	for (int i = 0; i < 100; i++)
+		rand();
+	object.push_back(new Player(140.0f, 200.0f, 1166.0f, 500.0f, 5.0f, "mex.png"));
+	//entityManager.spam(object);
+	
+	sf::RectangleShape wall(sf::Vector2f((float) ecranx, (float) ecrany));
 	sf::Texture back;
+	back.setSmooth(true);
 	back.loadFromFile("wall.jpg");
 	wall.setTexture(&back);
 
-std::thread t1(PlayerThread);
-	std::thread t2(RockThread,rock[0]);
-	Sleep(500);
-	std::thread t3(RockThread,rock[1]);
-	Sleep(500);
-	std::thread t4(RockThread, rock[2]);
-	Sleep(500);
-	std::thread t5(RockThread, rock[3]);
-
-	t1; t2; t3; t4; t5;
-
+    std::thread t1(PlayerThread, static_cast<Player*>(object[0]));
+	Sleep(600);
+	std::thread t2(createRockThreat, object);
+	
 	while (!fin)
 	{
-
 		win1.clear();
 		win1.draw(wall);
-		player1->Appear(win1);
-		for (int i = 0; i < rock.size(); ++i)
+		for (unsigned int i = 0; i < object.size(); ++i)
 		{
-			rock[i]->Appear(win1);
-			col(player1, rock[i]);
+			object[i]->Appear(win1);
+			if (i != 0)
+			{
+				col(static_cast <Player*> (object[0]), static_cast <Rock*> (object[i]));
+			}
 		}
 		win1.display();
+		
 		sf::Event ev1;
-        
 		while (win1.pollEvent(ev1))
 		{
 			switch (ev1.type)
@@ -156,16 +161,33 @@ std::thread t1(PlayerThread);
 				fin = 1;
 				break;
 			}
-		}	
+		}
+		for (int i = 1; i < object.size(); ++i)
+		{
+			(static_cast < Rock* > (object[i]))->Descend();
+			if (!(static_cast < Rock* > (object[i]))->InBounds())
+			{
+				object.erase(object.begin() + i);
+			}
+		}
+		Sleep(5);
+		++contorx;
 	}
+
+
 	
 	t1.join();
 	t2.join();
-	t3.join();
-	t4.join();
-	t5.join();
+	
+	win1.close();*/
+	entityManager.start();
 	return 0;
 }
 
 
 
+///De terminat coliziunea + spamarea random
+///De vector cu stergeri si spamari noi
+///De facut type la clasele tale
+///Player este tip 1, pietrele
+///sunt tip 2 si power-up este tip 3
