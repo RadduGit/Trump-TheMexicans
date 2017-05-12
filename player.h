@@ -1,7 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "entity.h"
+
 class Rock;
+
 class Player : public Entity
 {
 
@@ -12,5 +14,9 @@ public:
 	void MoveUp();
 	void MoveDown();
     void Appear(sf::RenderWindow&);
-	friend void col(Player* p, Rock* r);
+	friend void Collision(Player* p, Rock* r);
+	friend class EntityManager;
+	friend class InputManager;
 };
+
+

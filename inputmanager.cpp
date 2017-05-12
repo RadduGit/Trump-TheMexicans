@@ -5,7 +5,7 @@
 #include <SFML\Graphics.hpp>
 
 using namespace std;
-extern int fin;
+extern bool fin;
 
 
 
