@@ -49,21 +49,21 @@ void Highscores::draw(sf::RenderWindow & window)
 	for (int i = 0; i < highScore.size(); ++i)
 	{
 		text.setFont(font);
-		text.setColor(sf::Color::White);
+		text.setColor(sf::Color::Green);
 		string ss;
-		ss = "Loc";
+		ss = "High Score #";
 
 		ss += to_string(i + 1);
-		ss += ": ";
+		ss += " : ";
 		ss += to_string(highScore[i]);
-		text.setPosition(sf::Vector2f(width / 2, height / 13 * (i + 1)));
+		text.setPosition(sf::Vector2f(width / 3, height / 13 * (i + 1)));
 		text.setString(ss);
 		window.draw(text);
 	}
 	text.setFont(font);
 	text.setColor(sf::Color::Red);
 	text.setString("Press Enter to go back to the Menu");
-	text.setPosition(sf::Vector2f(width / 2 , height / 13 * 12));
+	text.setPosition(sf::Vector2f(width / 4 + 20 , height / 13 * 11));
 	window.draw(text);
 }
 
