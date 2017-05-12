@@ -5,11 +5,12 @@
 #include <thread>
 #include <vector>
 
-#include"EntityManager.h"
+#include "EntityManager.h"
 #include "player.h"
 #include "rock.h"
 #include "entity.h"
 #include "Menu.h"
+#include "Help.h"
 #define ecranx 1366	
 #define ecrany 768
 using namespace std;
@@ -24,6 +25,7 @@ bool fin = 0;
 int numcol;
 sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans");
 
+
 EntityManager EntityManager::entityManager;
 EntityManager& entityManager = EntityManager::getHandle();
 int main()
@@ -33,7 +35,8 @@ int main()
 	int n;
 
 	Menu menu(win1.getSize().x, win1.getSize().y);
-	sf::Event event;
+	Help help(win1.getSize().x, win1.getSize().y);
+	//sf::Event event;
 	
 
 
@@ -58,6 +61,7 @@ int main()
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return))
 			{
+				pressed = 1;
 				cout << e << endl;
 				if (menu.returnCurrentItem() == 0)
 				{
@@ -78,13 +82,30 @@ int main()
 		}
 
 		win1.clear();
-		win1.create(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans");
+
+		if (e == 2)
+		{
+			sf::RenderWindow  win2(sf::VideoMode(ecranx, ecrany), "Trump & The Mexican");
+			win2.clear();
+			help.draw(win2);
+			Sleep(300);
+			while (e == 2)
+			{
+				help.draw(win2);
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return))
+				{
+					e = 1;
+				}
+			}
+			win2.clear();
+			win2.close();
+		}
+
 		if (e == 0)
 		{
 			entityManager.start();
-			win1.clear();
-			win1.create(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans");
 			e = 1;
+			win1.clear();
 		}
 	}
 
@@ -92,9 +113,3 @@ int main()
 }
 
 
-
-///De terminat coliziunea + spamarea random
-///De vector cu stergeri si spamari noi
-///De facut type la clasele tale
-///Player este tip 1, pietrele
-///sunt tip 2 si power-up este tip 3

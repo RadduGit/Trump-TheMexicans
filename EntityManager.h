@@ -2,9 +2,9 @@
 
 #include<vector>
 
-#include "entity.h";
-#include "rock.h";
-#include "player.h";
+#include "entity.h"
+#include "rock.h"
+#include "player.h"
 #include <stdlib.h>
 
 
@@ -13,7 +13,7 @@ using namespace std;
 extern vector <Entity*> object;
 extern bool fin;
 extern int numcol;
-extern sf::RenderWindow  win1;
+//extern sf::RenderWindow  win1;
 
 class EntityManager {
 	

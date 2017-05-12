@@ -157,7 +157,7 @@ void EntityManager::col(Player *p, Rock *r)
 		cout << fx1 << " " << fx2 << " " << sx1 << " " << sx2 << " " << fy1 << " " << fy2 << sy1 << " " << sy2 << "\n";
 		cout << "Collision " << (intx2 - intx1)*(inty2 - inty1) << "\n";
 		//system("pause");
-		fin = 1;
+		//fin = 1;
 	}
 }
 
@@ -168,6 +168,7 @@ void EntityManager::createRockThread()
 		entityManager.spam(object);
 		Sleep(25);
 	}
+	cout << "pula1" << endl;
 }
 
 void EntityManager::PlayerThread(Player* player1)
@@ -196,11 +197,13 @@ void EntityManager::PlayerThread(Player* player1)
 		}
 		Sleep(5);
 	}
+	cout << "pula2" << endl;
 }
 
 void EntityManager::start()
 {
-	//sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
+	fin = 0;
+	sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
 	srand(unsigned int(time(NULL)));
 	for (int i = 0; i < 100; i++)
 		rand();
@@ -231,7 +234,7 @@ void EntityManager::start()
 		win1.display();
 
 		sf::Event ev1;
-		while (win1.pollEvent(ev1))
+		/*while (win1.pollEvent(ev1))
 		{
 			switch (ev1.type)
 			{
@@ -240,7 +243,7 @@ void EntityManager::start()
 				fin = 1;
 				break;
 			}
-		}
+		}*/
 		for (int i = 1; i < object.size(); ++i)
 		{
 			(static_cast < Rock* > (object[i]))->Descend();
@@ -252,10 +255,15 @@ void EntityManager::start()
 		Sleep(5);
 	}
 
-
+	object.clear();
 
 	t1.join();
 	t2.join();
 
+	object.clear();
+
+	object.resize(0);
+
 	win1.close();
+	cout << "pula3!" << endl;
 }
