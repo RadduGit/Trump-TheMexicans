@@ -231,6 +231,7 @@ void EntityManager::start()
 				col(static_cast <Player*> (object[0]), static_cast <Rock*> (object[i]));
 			}
 		}
+		score.draw(win1);
 		win1.display();
 
 		sf::Event ev1;
@@ -254,6 +255,8 @@ void EntityManager::start()
 		}
 		Sleep(5);
 	}
+	highscores.addHighscore(score.showScore());
+	score.reset();
 
 	object.clear();
 

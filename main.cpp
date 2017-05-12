@@ -11,26 +11,33 @@
 #include "entity.h"
 #include "Menu.h"
 #include "Help.h"
+#include "Score.h"
+#include "Highscores.h"
 #define ecranx 1366	
 #define ecrany 768
 using namespace std;
 
 unsigned int contorx = 0;
+unsigned int e = 1;
 
 //sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans", sf::Style::Default);
 
 vector <Entity*> object;
+vector < unsigned int > highScore;
+
+Highscores highscores(ecranx, ecrany);
 
 bool fin = 0;
 int numcol;
 sf::RenderWindow  win1(sf::VideoMode(ecranx, ecrany), "Trump & The Mexicans");
 
+Score score(win1.getSize().x, win1.getSize().y);
 
 EntityManager EntityManager::entityManager;
 EntityManager& entityManager = EntityManager::getHandle();
 int main()
 {   
-	unsigned int e = 1;
+	highscores.import();
 	bool pressed = 0, f = 1;
 	int n;
 
@@ -74,6 +81,10 @@ int main()
 				else if (menu.returnCurrentItem() == 2)
 				{
 					e = 3;
+				}
+				else if (menu.returnCurrentItem() == 3)
+				{
+					e = 4;
 					f = 0;
 				}
 			}
@@ -88,6 +99,7 @@ int main()
 			sf::RenderWindow  win2(sf::VideoMode(ecranx, ecrany), "Trump & The Mexican");
 			win2.clear();
 			help.draw(win2);
+			win2.display();
 			Sleep(300);
 			while (e == 2)
 			{
@@ -99,6 +111,27 @@ int main()
 			}
 			win2.clear();
 			win2.close();
+		}
+
+		if (e == 3)
+		{
+			highscores.import();
+			highscores.saveHighscores();
+			sf::RenderWindow  win3(sf::VideoMode(ecranx, ecrany), "Trump & The Mexican");
+			win3.clear();
+			highscores.draw(win3);
+			win3.display();
+			Sleep(300);
+			while (e == 3)
+			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return))
+				{
+					e = 1;
+				}
+			}
+			win3.clear();
+			win3.close();
+			
 		}
 
 		if (e == 0)

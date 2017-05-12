@@ -5,7 +5,7 @@ class Help
 {
 private:
 	sf::Font font;
-	sf::Text text[4];
+	sf::Text text[5];
 
 
 public:

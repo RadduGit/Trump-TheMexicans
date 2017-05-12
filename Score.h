@@ -1,14 +1,23 @@
 #pragma once
+#include "SFML\Graphics.hpp"
+#include <string>
+#include <iostream>
 
 class Score
 {
 private:
-	unsigned long long score;
+	std::string ss;
+	unsigned long long value, speed;
+	void increaseSpeed();
+	void increaseScore();
+	sf::Font font;
+	sf::Text text;
 public:
-	Score();
+	Score(float width, float height);
 	~Score();
-	void afisare();
-	void afisareViteza();
-	void crestereViteza();
+	void draw(sf::RenderWindow &window);
+	void reset();
+	unsigned long long showScore();
+	
 
-}
+};
