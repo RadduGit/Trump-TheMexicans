@@ -14,10 +14,10 @@ Score::Score(float width, float height)
 	value = 0;
 	speed = 1;
 	text.setFont(font);
-	text.setColor(sf::Color::White);
+	text.setColor(sf::Color::Black);
 	ss = to_string(value);
 	text.setString(ss);
-	text.setPosition(sf::Vector2f(width / 11 * 10 , height / 10  ));
+	text.setPosition(sf::Vector2f(width / 12 * 10 , height / 10  ));
 }
 
 Score::~Score()
@@ -38,12 +38,13 @@ void Score::increaseScore()
 
 void Score::draw(sf::RenderWindow &window)
 {
-	ss = to_string(value);
-	cout << "Scor-ul este: " << ss << endl;
+	ss = "Score : " + to_string(value);
+
 	text.setString(ss);
 	window.draw(text);
 	increaseScore();
 }
+
 
 void Score::reset()
 {
